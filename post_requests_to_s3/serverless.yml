@@ -1,0 +1,136 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: post_requests_to_s3
+
+plugins:
+  - serverless-domain-manager
+
+# You can pin your service to only deploy with a specific Serverless version
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+# you can overwrite serverless.com defaults here
+#  stage: dev
+#  region: us-east-1
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  domains:
+    prod: api.mydomain.com
+    staging: staging-api.mydomain.com
+    dev: dev-api.mydomain.com
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    certificateName: "*.mydomain.com"
+    basePath: ''
+    stage: ${opt:stage, self:provider.stage}
+    createRoute53Record: true
+
+  bucket: open-endpoint-requests
+
+# The Lambda function's IAM Role will have this policy:
+iamRoleStatements:
+ - Effect: Allow
+   Action:
+     - s3:ListBucket
+   Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ] }
+ - Effect: Allow
+   Action:
+     - s3:PutObject
+   Resource: { "Fn::Join": ["", ["arn:aws:s3:::", {"Ref" : "ServerlessDeploymentBucket"}, "/*" ] ] }
+ - Effect: Allow
+   Action:
+     - s3:PutObject
+   Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+functions:
+  ping:
+    memorySize: 512
+    handler: handler.ping
+    events:
+      - http:
+          path: /ping
+          method: get
+  obj1_notification:
+    memorySize: 512
+    handler: handler.save
+    events:
+      - http:
+          path: /{group}/obj1_notification
+          method: post
+          request:
+            parameters:
+              paths:
+                group: true
+    # function environment variables here
+    environment:
+      BUCKET: ${self:custom.bucket}
+  obj2_notification:
+    memorySize: 512
+    handler: handler.save
+    events:
+      - http:
+          path: /{group}/obj2_notification
+          method: post
+          request:
+            parameters:
+              paths:
+                group: true
+    environment:
+      BUCKET: ${self:custom.bucket}
+
+package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+  exclude:
+    - node_modules/**
+
+
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    events:
+#      - http:
+#          path: users/create
+#          method: get
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1

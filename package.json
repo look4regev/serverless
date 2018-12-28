@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "goddamn-javascript-eslint": "^2.0.0",
+    "serverless-domain-manager": "^2.6.6"
+  },
+  "scripts": {
+    "lint": "eslint ./**/*.js --fix"
+  }
+}
