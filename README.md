@@ -12,7 +12,7 @@ Using serverless you easily create, deploy and test serverless services. Useful 
 3. FYI: Each directory here is a "service" with a deploy of its own. Useless to say you need to run `yarn install` for every dir with `package.json`.
 
 ## Creating new services
-1. Create new serverless template service: `serverless create --template aws-nodejs --path "my-service"` (See other (templates)[https://serverless.com/framework/docs/providers/aws/guide/services/]
+1. Create new serverless template service: `serverless create --template aws-nodejs --path "my-service"` (See other [templates](https://serverless.com/framework/docs/providers/aws/guide/services/))
 2. `cd my-service`
 
 ## Testing in local
