@@ -1,4 +1,7 @@
 # serverless
+[![Build Status](https://travis-ci.org/look4regev/serverless.svg?branch=master)](https://travis-ci.org/look4regev/serverless)
+[![Known Vulnerabilities](https://snyk.io/test/github/look4regev/serverless/badge.svg)](https://snyk.io/test/github/look4regev/serverless)
+
 Using [serverless](https://serverless.com) infra for different AWS Lambda operations
 
 ## How does it work?

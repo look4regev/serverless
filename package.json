@@ -4,6 +4,7 @@
     "serverless-domain-manager": "^2.6.6"
   },
   "scripts": {
-    "lint": "eslint ./**/*.js --fix"
+    "lint": "eslint ./**/*.js",
+    "lint-fix": "yarn lint --fix"
   }
 }
