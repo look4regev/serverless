@@ -42,6 +42,9 @@ Background docs: See this [basic guide](https://serverless.com/blog/serverless-a
 1. Prerequisit: Add manually to your `serverless.yml`: `plugins: [serverless-domain-manager]`. **Do not** run the `serverless plugin install` because it uses npm, and I install it with yarn by the `package.json` found here.
 2. As written in the docs, after configuring the domain in the `serverless.yml`, you need to run one time `sls create_domain --stage prod` (for every stage env). Then deploy.
 
+# Other resources
+1. [https://datree.io/serverless-best-practices/](https://datree.io/serverless-best-practices/)
+
 # Contributing
 Fork, implement, add tests, pull request, get my everlasting thanks and a respectable place here :)
 
